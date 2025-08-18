@@ -151,7 +151,7 @@
         <h2>🚧 Meus Projetos</h2>
 
         <div class="projects-grid">
-          <!-- Projeto 1 -->
+          <!-- Projetos fixos -->
           <div class="project-card">
             <img src="https://opengraph.githubassets.com/1/spaderale/alexandrebs.com" alt="Projeto Portfolio">
             <h3>alexandrebs.com</h3>
@@ -159,7 +159,6 @@
             <a href="https://github.com/spaderale/alexandrebs.com" target="_blank">Ver no GitHub</a>
           </div>
 
-          <!-- Projeto 2 -->
           <div class="project-card">
             <img src="https://opengraph.githubassets.com/1/spaderale/42cursus-libft" alt="Projeto Libft">
             <h3>Libft</h3>
@@ -167,7 +166,6 @@
             <a href="https://github.com/spaderale/42cursus-libft" target="_blank">Ver no GitHub</a>
           </div>
 
-          <!-- Projeto 3 -->
           <div class="project-card">
             <img src="https://opengraph.githubassets.com/1/spaderale/Born2beroot" alt="Projeto Born2beroot">
             <h3>Born2beroot</h3>
@@ -178,7 +176,35 @@
       </div>
     </main>
   </div>
-</body>
 
+  <!-- Script para carregar automaticamente os outros repositórios -->
+  <script>
+    async function loadRepos() {
+      const res = await fetch("https://api.github.com/users/spaderale/repos");
+      const repos = await res.json();
+      const grid = document.querySelector(".projects-grid");
+
+      // Repositórios já adicionados manualmente
+      const excluded = ["alexandrebs.com", "42cursus-libft", "Born2beroot"];
+
+      // Ordena pelos mais recentes (última atualização)
+      repos
+        .filter(repo => !excluded.includes(repo.name))
+        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+        .forEach(repo => {
+          const card = document.createElement("div");
+          card.className = "project-card";
+          card.innerHTML = `
+            <img src="https://opengraph.githubassets.com/1/spaderale/${repo.name}" alt="${repo.name}">
+            <h3>${repo.name}</h3>
+            <p>${repo.description || "Sem descrição ainda"}</p>
+            <a href="${repo.html_url}" target="_blank">Ver no GitHub</a>
+          `;
+          grid.appendChild(card);
+        });
+    }
+    loadRepos();
+  </script>
+</body>
 </html>
 
