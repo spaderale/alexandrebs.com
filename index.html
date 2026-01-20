@@ -13,122 +13,128 @@
       box-sizing: border-box;
     }
 
-    /* ==================== BACKGROUD  ==================== */
+    /* ==================== BACKGROUND NEBULOSA PROFUNDA ==================== */
+    /* Centalização vertical e horizontal com display: flex
+       O body preenche 100vh e centra todo o conteúdo no meio da tela */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0a0e27;
-      color: #e0e0e0;
+      background-color: #0a0a14;
+      color: #f5f5f5;
       min-height: 100vh;
       overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
+      /* Background com efeito de nebulosa profunda usando múltiplos radial-gradient
+         Cria camadas de profundidade com azul marinho, roxo suave e transparência */
       background:
-        radial-gradient(ellipse at 20% 50%, rgba(88, 44, 155, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(44, 88, 155, 0.15) 0%, transparent 50%),
-        linear-gradient(135deg, #0a0e27 0%, #1a0f3a 100%);
+        radial-gradient(ellipse at 15% 40%, rgba(72, 52, 212, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 60%, rgba(22, 33, 62, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(26, 26, 46, 0.1) 0%, transparent 70%),
+        linear-gradient(135deg, #0a0a14 0%, #1a1a2e 50%, #16213e 100%);
       background-attachment: fixed;
     }
 
     /* ==================== CONTAINER PRINCIPAL ==================== */
+    /* O container tem max-width e padding para não ficar muito perto das bordas
+       Mantém o efeito de "flutuação" no espaço */
     .container {
       max-width: 1200px;
-      margin: 0 auto;
+      width: 100%;
       padding: 2rem 1rem;
     }
 
-    /* ==================== GRID LAYOUT BENTO ==================== */
-    /* Este grid controla toda a estrutura do layout:
-       - grid-template-columns: Define 2 colunas de tamanho igual
-       - grid-template-rows: Define 3 linhas (header, content superior, content inferior)
-       - grid-template-areas: Nomeia as áreas para fácil reposicionamento
-    */
+    /* ==================== GRID LAYOUT BENTO COM 6 COLUNAS ==================== */
+    /* Estrutura de 6 colunas permite:
+       - Header: 6 colunas (ocupar a largura toda)
+       - Foto: 3 colunas à esquerda
+       - Bio: 3 colunas à direita
+       - Links: 2 colunas cada (3 links = 6 colunas distribuídos)
+
+       grid-template-areas nomeia visualmente cada região para fácil reposicionamento */
     .bento-grid {
-  display: grid;
-  /* Definimos 6 colunas para permitir a divisão por 2 e por 3 simultaneamente */
-  grid-template-columns: repeat(6, 1fr); 
-  grid-template-rows: auto auto auto;
-  gap: 1.5rem;
-  grid-template-areas:
-    "header header header header header header"
-    "photo  photo  photo  bio     bio     bio"
-    "linkedin linkedin github github kaggle  kaggle";
-  }
-  /* Ligação entre as áreas do Grid e as classes do HTML */
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: auto 1fr 1fr;
+      gap: 1.5rem;
+      grid-template-areas:
+        "header header header header header header"
+        "photo  photo  photo  bio     bio     bio"
+        "linkedin linkedin github github kaggle  kaggle";
+    }
+
+    /* Atribuição de grid-area para cada elemento */
     .bento-header { grid-area: header; }
     .bento-photo  { grid-area: photo; }
     .bento-bio    { grid-area: bio; }
-
-/* Para os links, como eles usam a mesma classe .bento-link, 
-   usamos o seletor de ordem (nth-child) */
-  .bento-link:nth-of-type(1) { grid-area: linkedin; }
-  .bento-link:nth-of-type(2) { grid-area: github; }
-  .bento-link:nth-of-type(3) { grid-area: kaggle; }
+    .bento-link:nth-of-type(1) { grid-area: linkedin; }
+    .bento-link:nth-of-type(2) { grid-area: github; }
+    .bento-link:nth-of-type(3) { grid-area: kaggle; }
 
     /* ==================== HEADER ==================== */
     .bento-header {
-      grid-area: header;
       text-align: center;
       padding: 1.5rem;
       background: rgba(255, 255, 255, 0.03);
       border-radius: 24px;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .bento-header:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
     .name {
       font-size: 2rem;
       font-weight: 700;
       letter-spacing: 2px;
-      background: linear-gradient(135deg, #7dd3fc, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #f5f5f5;
     }
 
     .tagline {
       font-size: 1rem;
-      color: #a0a0a0;
+      color: #b0b0b0;
       margin-top: 0.5rem;
       font-style: italic;
     }
 
     /* ==================== BLOCO FOTO ==================== */
-    /* Posicionado à esquerda (grid-area: photo) */
+    /* A foto preenche 100% do card sem padding visível
+       overflow: hidden garante que as bordas arredondadas funcionem corretamente */
     .bento-photo {
-      grid-area: photo;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      background: rgba(255, 255, 255, 0.03);
+      overflow: hidden;
       border-radius: 24px;
+      background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       transition: all 0.3s ease;
     }
 
     .bento-photo:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(125, 211, 252, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
     }
 
     .photo {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border: 3px solid rgba(125, 211, 252, 0.5);
-      box-shadow: 0 0 30px rgba(125, 211, 252, 0.2);
+      display: block;
     }
 
     /* ==================== BLOCO BIO ==================== */
-    /* Posicionado à direita (grid-area: bio) */
+    /* Bio com layout flexível que distribui conteúdo e contatos */
     .bento-bio {
-      grid-area: bio;
       padding: 2rem;
       background: rgba(255, 255, 255, 0.03);
       border-radius: 24px;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -136,8 +142,8 @@
     }
 
     .bento-bio:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(167, 139, 250, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
     .bio-content {
@@ -147,13 +153,13 @@
     .bio-content h2 {
       font-size: 1.5rem;
       margin-bottom: 1rem;
-      color: #7dd3fc;
+      color: #f5f5f5;
     }
 
     .bio-content p {
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #c0c0c0;
+      font-size: 1.2rem;
+      line-height: 1.7;
+      color: #e5e5e5;
     }
 
     /* Contatos discretos no final do bloco bio */
@@ -163,36 +169,35 @@
       margin-top: 1.5rem;
       padding-top: 1.5rem;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
     }
 
     .contact-item {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #a0a0a0;
-      font-size: 0.9rem;
+      color: #b0b0b0;
+      font-size: 0.95rem;
       transition: color 0.3s ease;
     }
 
     .contact-item:hover {
-      color: #7dd3fc;
+      color: #f5f5f5;
     }
 
     .contact-icon {
       font-size: 1.2rem;
     }
 
-    /* ==================== BLOCOS DE LINKS (LINKEDIN, GITHUB) ==================== */
-    /* Cada bloco ocupa uma célula do grid inferior
-       Usamos grid-area para posicionar: linkedin, github
-       Para adicionar kaggle, ajuste: grid-template-areas na .bento-grid
-    */
+    /* ==================== BLOCOS DE LINKS (GLASSMORPHISM) ==================== */
+    /* Cards com glassmorphism: background translúcido + backdrop-filter blur
+       Cada card ocupa 2 colunas (total 6 = 3 cards de 2 colunas cada) */
     .bento-link {
       padding: 2rem;
       background: rgba(255, 255, 255, 0.03);
       border-radius: 24px;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -201,48 +206,67 @@
       transition: all 0.3s ease;
       cursor: pointer;
       text-decoration: none;
-      color: inherit;
+      color: #f5f5f5;
     }
 
     .bento-link:hover {
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(125, 211, 252, 0.5);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(125, 211, 252, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
     }
 
     .link-icon {
-      font-size: 3rem;
+      font-size: 3.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .bento-link:hover .link-icon {
+      transform: scale(1.1);
     }
 
     .link-label {
       font-size: 1.2rem;
       font-weight: 600;
-      background: linear-gradient(135deg, #7dd3fc, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #f5f5f5;
     }
 
-    /* ==================== RESPONSIVIDADE ==================== */
+    /* ==================== RESPONSIVIDADE MOBILE ==================== */
     @media (max-width: 768px) {
-  .bento-grid {
-    grid-template-areas:
-      "header"
-      "photo"
-      "bio"
-      "linkedin"
-      "github"
-      "kaggle";
-    /* No mobile, cada área passa a ocupar a linha inteira */
-    grid-template-columns: 1fr; 
-  }
-  
-  /* Resetamos as áreas para ocuparem a única coluna disponível */
-  .bento-header, .bento-photo, .bento-bio, .bento-link {
-    grid-area: auto;
-  }
-  }
+      body {
+        align-items: flex-start;
+        padding-top: 2rem;
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "header"
+          "photo"
+          "bio"
+          "linkedin"
+          "github"
+          "kaggle";
+        gap: 1rem;
+      }
+
+      .name {
+        font-size: 1.5rem;
+      }
+
+      .bento-photo {
+        min-height: 250px;
+      }
+
+      .bio-content p {
+        font-size: 1rem;
+      }
+
+      .bento-link {
+        padding: 1.5rem;
+      }
+    }
   </style>
 </head>
 
@@ -253,15 +277,14 @@
       <!-- HEADER: Nome e Tagline -->
       <header class="bento-header">
         <div class="name">ALEXANDRE BROSLAVETZ SPADER</div>
-        <div class="tagline">just exploring 🚀</div>
       </header>
 
-      <!-- FOTO: À esquerda superior -->
+      <!-- FOTO: À esquerda superior (3 colunas) -->
       <div class="bento-photo">
         <img src="image.jpeg" alt="Foto de perfil" class="photo" />
       </div>
 
-      <!-- BIO: À direita superior com contatos -->
+      <!-- BIO: À direita superior (3 colunas) -->
       <div class="bento-bio">
         <div class="bio-content">
           <h2>Olá!</h2>
@@ -279,19 +302,19 @@
         </div>
       </div>
 
-      <!-- LINK LINKEDIN: Inferior esquerdo -->
+      <!-- LINK LINKEDIN: Inferior (2 colunas) -->
       <a href="https://www.linkedin.com/in/alexandre-spader/" target="_blank" class="bento-link">
         <div class="link-icon">💼</div>
         <div class="link-label">LinkedIn</div>
       </a>
 
-      <!-- LINK GITHUB: Inferior direito -->
+      <!-- LINK GITHUB: Inferior (2 colunas) -->
       <a href="https://github.com/spaderale" target="_blank" class="bento-link">
         <div class="link-icon">🐙</div>
         <div class="link-label">GitHub</div>
       </a>
 
-      <!-- LINK KAGGLE: Inferior central -->
+      <!-- LINK KAGGLE: Inferior (2 colunas) -->
       <a href="https://www.kaggle.com/alexandrespader" target="_blank" class="bento-link">
         <div class="link-icon">📊</div>
         <div class="link-label">Kaggle</div>
