@@ -6,205 +6,299 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alexandre Broslavetz Spader</title>
   <style>
-    body {
+    /* ==================== RESET & GLOBAL ==================== */
+    * {
       margin: 0;
-      font-family: 'Courier New', monospace;
-      background-color: #0a0a0a;
-      color: #e0e0e0;
-      line-height: 1.6;
-      text-align: center;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .header {
-      padding: 2rem 0;
-      border-bottom: 1px solid #333;
+    /* ==================== BACKGROUD  ==================== */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0a0e27;
+      color: #e0e0e0;
+      min-height: 100vh;
+      overflow-x: hidden;
+
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(88, 44, 155, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(44, 88, 155, 0.15) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0e27 0%, #1a0f3a 100%);
+      background-attachment: fixed;
+    }
+
+    /* ==================== CONTAINER PRINCIPAL ==================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* ==================== GRID LAYOUT BENTO ==================== */
+    /* Este grid controla toda a estrutura do layout:
+       - grid-template-columns: Define 2 colunas de tamanho igual
+       - grid-template-rows: Define 3 linhas (header, content superior, content inferior)
+       - grid-template-areas: Nomeia as áreas para fácil reposicionamento
+    */
+    .bento-grid {
+  display: grid;
+  /* Definimos 6 colunas para permitir a divisão por 2 e por 3 simultaneamente */
+  grid-template-columns: repeat(6, 1fr); 
+  grid-template-rows: auto auto auto;
+  gap: 1.5rem;
+  grid-template-areas:
+    "header header header header header header"
+    "photo  photo  photo  bio     bio     bio"
+    "linkedin linkedin github github kaggle  kaggle";
+  }
+  /* Ligação entre as áreas do Grid e as classes do HTML */
+    .bento-header { grid-area: header; }
+    .bento-photo  { grid-area: photo; }
+    .bento-bio    { grid-area: bio; }
+
+/* Para os links, como eles usam a mesma classe .bento-link, 
+   usamos o seletor de ordem (nth-child) */
+  .bento-link:nth-of-type(1) { grid-area: linkedin; }
+  .bento-link:nth-of-type(2) { grid-area: github; }
+  .bento-link:nth-of-type(3) { grid-area: kaggle; }
+
+    /* ==================== HEADER ==================== */
+    .bento-header {
+      grid-area: header;
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .name {
-      font-size: 1.8rem;
+      font-size: 2rem;
+      font-weight: 700;
       letter-spacing: 2px;
-    }
-
-    .photo {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin: 3rem auto 1rem;
-      border: 3px solid #2a2a2a;
-      box-shadow: 0 0 20px rgba(0, 150, 255, 0.1);
+      background: linear-gradient(135deg, #7dd3fc, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .tagline {
-      font-size: 1.2rem;
-      color: #888;
-      margin-bottom: 2rem;
+      font-size: 1rem;
+      color: #a0a0a0;
+      margin-top: 0.5rem;
       font-style: italic;
     }
 
-    .links {
+    /* ==================== BLOCO FOTO ==================== */
+    /* Posicionado à esquerda (grid-area: photo) */
+    .bento-photo {
+      grid-area: photo;
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
-    }
-
-    .link {
-      color: #4a9eda;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border: 1px solid #333;
-      border-radius: 4px;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       transition: all 0.3s ease;
     }
 
-    .link:hover {
-      background-color: #1a1a1a;
-      border-color: #4a9eda;
+    .bento-photo:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(125, 211, 252, 0.3);
     }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
-    .content-section {
-      margin-top: 4rem;
-      text-align: left;
-    }
-
-    .content-section h2 {
-      text-align: center;
-      color: #4a9eda;
-      margin-bottom: 2rem;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .project-card {
-      background-color: #1a1a1a;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(74, 158, 218, 0.1);
-      text-align: left;
-      transition: transform 0.3s ease;
-    }
-
-    .project-card:hover {
-      transform: scale(1.02);
-    }
-
-    .project-card img {
-      width: 100%;
-      height: 150px;
+    .photo {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
       object-fit: cover;
-      border-radius: 6px;
+      border: 3px solid rgba(125, 211, 252, 0.5);
+      box-shadow: 0 0 30px rgba(125, 211, 252, 0.2);
+    }
+
+    /* ==================== BLOCO BIO ==================== */
+    /* Posicionado à direita (grid-area: bio) */
+    .bento-bio {
+      grid-area: bio;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+
+    .bento-bio:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .bio-content {
+      flex: 1;
+    }
+
+    .bio-content h2 {
+      font-size: 1.5rem;
       margin-bottom: 1rem;
+      color: #7dd3fc;
     }
 
-    .project-card h3 {
-      color: #4a9eda;
-      margin-bottom: 0.5rem;
+    .bio-content p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #c0c0c0;
     }
 
-    .project-card p {
-      color: #ccc;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
+    /* Contatos discretos no final do bloco bio */
+    .bio-contacts {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .project-card a {
-      color: #4a9eda;
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #a0a0a0;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    .contact-item:hover {
+      color: #7dd3fc;
+    }
+
+    .contact-icon {
+      font-size: 1.2rem;
+    }
+
+    /* ==================== BLOCOS DE LINKS (LINKEDIN, GITHUB) ==================== */
+    /* Cada bloco ocupa uma célula do grid inferior
+       Usamos grid-area para posicionar: linkedin, github
+       Para adicionar kaggle, ajuste: grid-template-areas na .bento-grid
+    */
+    .bento-link {
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
       text-decoration: none;
-      font-weight: bold;
+      color: inherit;
     }
 
-    .project-card a:hover {
-      text-decoration: underline;
+    .bento-link:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(125, 211, 252, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(125, 211, 252, 0.1);
     }
+
+    .link-icon {
+      font-size: 3rem;
+    }
+
+    .link-label {
+      font-size: 1.2rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #7dd3fc, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ==================== RESPONSIVIDADE ==================== */
+    @media (max-width: 768px) {
+  .bento-grid {
+    grid-template-areas:
+      "header"
+      "photo"
+      "bio"
+      "linkedin"
+      "github"
+      "kaggle";
+    /* No mobile, cada área passa a ocupar a linha inteira */
+    grid-template-columns: 1fr; 
+  }
+  
+  /* Resetamos as áreas para ocuparem a única coluna disponível */
+  .bento-header, .bento-photo, .bento-bio, .bento-link {
+    grid-area: auto;
+  }
+  }
   </style>
 </head>
 
 <body>
+  <!-- GRID BENTO PRINCIPAL -->
   <div class="container">
-    <header class="header">
-      <div class="name">ALEXANDRE BROSLAVETZ SPADER</div>
-    </header>
+    <div class="bento-grid">
+      <!-- HEADER: Nome e Tagline -->
+      <header class="bento-header">
+        <div class="name">ALEXANDRE BROSLAVETZ SPADER</div>
+        <div class="tagline">just exploring 🚀</div>
+      </header>
 
-    <main>
-      <img src="image.jpeg" alt="Foto de perfil" class="photo" />
-      <div class="tagline">just exploring 🚀</div>
-
-      <div class="links">
-        <a href="https://www.linkedin.com/in/alexandre-spader-6447a91a2/" target="_blank" class="link">LinkedIn</a>
-        <a href="https://github.com/spaderale" target="_blank" class="link">GitHub</a>
+      <!-- FOTO: À esquerda superior -->
+      <div class="bento-photo">
+        <img src="image.jpeg" alt="Foto de perfil" class="photo" />
       </div>
 
-      <!-- Seção de Projetos -->
-      <div class="content-section">
-        <h2>🚧 Meus Projetos</h2>
-
-        <div class="projects-grid">
-          <!-- Projetos fixos -->
-          <div class="project-card">
-            <img src="https://opengraph.githubassets.com/1/spaderale/alexandrebs.com" alt="Projeto Portfolio">
-            <h3>alexandrebs.com</h3>
-            <p>Meu portfólio pessoal feito com HTML e CSS puro. Atualizo com estudos, posts e projetos.</p>
-            <a href="https://github.com/spaderale/alexandrebs.com" target="_blank">Ver no GitHub</a>
+      <!-- BIO: À direita superior com contatos -->
+      <div class="bento-bio">
+        <div class="bio-content">
+          <h2>Olá!</h2>
+          <p>Sou desenvolvedor e estudante da 42 São Paulo. Apaixonado por resolver problemas com código limpo e eficiente. Sempre explorando novas tecnologias e contribuindo em projetos open source.</p>
+        </div>
+        <div class="bio-contacts">
+          <div class="contact-item">
+            <span class="contact-icon">✉️</span>
+            <span>aleb.spader@gmail.com</span>
           </div>
-
-          <div class="project-card">
-            <img src="https://opengraph.githubassets.com/1/spaderale/42cursus-libft" alt="Projeto Libft">
-            <h3>Libft</h3>
-            <p>Biblioteca padrão feita do zero em C no início do curso da 42. Funções de string, memória e listas.</p>
-            <a href="https://github.com/spaderale/42cursus-libft" target="_blank">Ver no GitHub</a>
-          </div>
-
-          <div class="project-card">
-            <img src="https://opengraph.githubassets.com/1/spaderale/Born2beroot" alt="Projeto Born2beroot">
-            <h3>Born2beroot</h3>
-            <p>Configuração de uma VM com Debian, UFW, LVM, sudo e hostname seguro como root.</p>
-            <a href="https://github.com/spaderale/Born2beroot" target="_blank">Ver no GitHub</a>
+          <div class="contact-item">
+            <span class="contact-icon">📱</span>
+            <span>+351 912-730-490</span>
           </div>
         </div>
       </div>
-    </main>
+
+      <!-- LINK LINKEDIN: Inferior esquerdo -->
+      <a href="https://www.linkedin.com/in/alexandre-spader/" target="_blank" class="bento-link">
+        <div class="link-icon">💼</div>
+        <div class="link-label">LinkedIn</div>
+      </a>
+
+      <!-- LINK GITHUB: Inferior direito -->
+      <a href="https://github.com/spaderale" target="_blank" class="bento-link">
+        <div class="link-icon">🐙</div>
+        <div class="link-label">GitHub</div>
+      </a>
+
+      <!-- LINK KAGGLE: Inferior central -->
+      <a href="https://www.kaggle.com/alexandrespader" target="_blank" class="bento-link">
+        <div class="link-icon">📊</div>
+        <div class="link-label">Kaggle</div>
+      </a>
+    </div>
   </div>
-
-  <!-- Script para carregar automaticamente os outros repositórios -->
-  <script>
-    async function loadRepos() {
-      const res = await fetch("https://api.github.com/users/spaderale/repos");
-      const repos = await res.json();
-      const grid = document.querySelector(".projects-grid");
-
-      // Repositórios já adicionados manualmente
-      const excluded = ["alexandrebs.com", "42cursus-libft", "Born2beroot"];
-
-      // Ordena pelos mais recentes (última atualização)
-      repos
-        .filter(repo => !excluded.includes(repo.name))
-        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
-        .forEach(repo => {
-          const card = document.createElement("div");
-          card.className = "project-card";
-          card.innerHTML = `
-            <img src="https://opengraph.githubassets.com/1/spaderale/${repo.name}" alt="${repo.name}">
-            <h3>${repo.name}</h3>
-            <p>${repo.description || "Sem descrição ainda"}</p>
-            <a href="${repo.html_url}" target="_blank">Ver no GitHub</a>
-          `;
-          grid.appendChild(card);
-        });
-    }
-    loadRepos();
-  </script>
 </body>
+
 </html>
 
